@@ -1,0 +1,3 @@
+C:/Users/marco/OneDrive/Desktop/PROJECTS/PBL_PROJECTS/FileSystemSimulator/backend/build/CMakeFiles/FileSystemSimulator.dir
+C:/Users/marco/OneDrive/Desktop/PROJECTS/PBL_PROJECTS/FileSystemSimulator/backend/build/CMakeFiles/edit_cache.dir
+C:/Users/marco/OneDrive/Desktop/PROJECTS/PBL_PROJECTS/FileSystemSimulator/backend/build/CMakeFiles/rebuild_cache.dir
