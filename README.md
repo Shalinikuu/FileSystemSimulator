@@ -12,65 +12,83 @@ The **File System Simulator** is a project aimed at simulating file system opera
 
 ## Running the Backend
 
-Follow these steps to run the backend of the **File System Simulator**:
+Follow these steps to run the backend of the File System Simulator:
 
-### Prerequisites:
-- **CMake** installed.
-- **MinGW** or another C++ compiler.
-- **Crow** framework setup for C++.
+## Prerequisites:
 
-### Steps to Run the Backend:
+CMake installed.
+MinGW or another C++ compiler.
+Crow framework setup for C++.
+OpenSSL installed and configured (see instructions below).
+Steps to Run the Backend:
 
-1. **Delete the `build` folder** (if it exists from a previous build attempt).
+Delete the build folder (if it exists from a previous build attempt).
 
-2. **Open Command Prompt** and navigate to the backend folder of your project.
+Open Command Prompt and navigate to the backend folder of your project.
 
-   For example:
+## For example:
 
-   ```
-   "YourFolderLocation"\FileSystemSimulator\backend
-   ```
+"YourFolderLocation"\FileSystemSimulator\backend
+Generate the build system using CMake:
 
-3. **Generate the build system using CMake**:
+Run the following command:
 
-   Run the following command:
+cmake -B build -G "MinGW Makefiles"
 
-   ```
-   cmake -B build -G "MinGW Makefiles"
-   ```
+## Build the project:
 
-4. **Build the project**:
+## After the CMake command finishes, build the project by running:
 
-   After the CMake command finishes, build the project by running:
+cmake --build build
+This command will compile the code and create an executable file.
 
-   ```
-   cmake --build build
-   ```
+## Navigate to the build folder:
 
-   This command will compile the code and create an executable file.
+## Run the following command:
 
-5. **Navigate to the build folder**:
+cd build
+Run the executable:
 
-   Run the following command:
+Start the backend server by running the executable:
 
-   ```
-   cd build
-   ```
+FileSystemSimulator\backend\build>FileSystem.exe
+Access the Backend:
 
-6. **Run the executable**:
+Your backend should now be running at:
 
-   Start the backend server by running the executable:
+http://localhost:8080/
+You can now interact with the backend via REST API calls.
 
-   ```
-   FileSystemSimulator\backend\build>FileSystem.exe
-   ```
+## Downloading and Setting Up OpenSSL
 
-7. **Access the Backend**:
+## Download OpenSSL:
 
-   Your backend should now be running at:
+Go to the OpenSSL website or a trusted mirror (e.g., Shining Light Productions).
+Download the latest Win32/Win64 OpenSSL installer for your system.
+Install OpenSSL:
 
-   ```
-   http://localhost:8080/
-   ```
+Run the downloaded installer.
+Choose the default installation directory or select a different location.
+Complete the installation process.
+Set System Variable:
 
-   You can now interact with the backend via REST API calls.
+Search for "Environment Variables" in the Windows search bar.
+Click on "Edit the system environment variables."
+Click on the "Environment Variables" button.
+Under "System Variables," find1 the "Path" variable and click "Edit."   
+1.
+github.com
+github.com
+Click "New" and add the path to the OpenSSL bin directory (e.g., C:\Program Files\OpenSSL-Win64\bin).
+Click "OK" on all windows to save the changes.
+Verify Installation:
+
+Open a new Command Prompt window.
+Type openssl version and press Enter.
+You should see the OpenSSL version information if it's installed correctly.
+
+## Explanation
+
+OpenSSL is a cryptography toolkit that provides secure communication and encryption capabilities. It's required for generating and verifying JWT tokens used for authentication in the File System Simulator.
+Downloading and installing the OpenSSL installer provides the necessary libraries and tools.
+Setting the OpenSSL bin directory in the system's "Path" variable allows you to use the openssl command from any location in the Command Prompt. This is required for running the backend server, which uses OpenSSL for JWT operations.
