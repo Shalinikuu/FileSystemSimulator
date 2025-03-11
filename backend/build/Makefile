@@ -56,10 +56,10 @@ RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend
+CMAKE_SOURCE_DIR = C:\CODES\PBL_GITHUB\FileSystemSimulator\backend
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build
+CMAKE_BINARY_DIR = C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build\CMakeFiles C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\CMakeFiles C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -128,6 +128,54 @@ FileSystemSimulator/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\FileSystemSimulator.dir\build.make CMakeFiles/FileSystemSimulator.dir/build
 .PHONY : FileSystemSimulator/fast
 
+auth.obj: auth.cpp.obj
+.PHONY : auth.obj
+
+# target to build an object file
+auth.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FileSystemSimulator.dir\build.make CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj
+.PHONY : auth.cpp.obj
+
+auth.i: auth.cpp.i
+.PHONY : auth.i
+
+# target to preprocess a source file
+auth.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FileSystemSimulator.dir\build.make CMakeFiles/FileSystemSimulator.dir/auth.cpp.i
+.PHONY : auth.cpp.i
+
+auth.s: auth.cpp.s
+.PHONY : auth.s
+
+# target to generate assembly for a file
+auth.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FileSystemSimulator.dir\build.make CMakeFiles/FileSystemSimulator.dir/auth.cpp.s
+.PHONY : auth.cpp.s
+
+globals.obj: globals.cpp.obj
+.PHONY : globals.obj
+
+# target to build an object file
+globals.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FileSystemSimulator.dir\build.make CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj
+.PHONY : globals.cpp.obj
+
+globals.i: globals.cpp.i
+.PHONY : globals.i
+
+# target to preprocess a source file
+globals.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FileSystemSimulator.dir\build.make CMakeFiles/FileSystemSimulator.dir/globals.cpp.i
+.PHONY : globals.cpp.i
+
+globals.s: globals.cpp.s
+.PHONY : globals.s
+
+# target to generate assembly for a file
+globals.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\FileSystemSimulator.dir\build.make CMakeFiles/FileSystemSimulator.dir/globals.cpp.s
+.PHONY : globals.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -161,6 +209,12 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... FileSystemSimulator
+	@echo ... auth.obj
+	@echo ... auth.i
+	@echo ... auth.s
+	@echo ... globals.obj
+	@echo ... globals.i
+	@echo ... globals.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

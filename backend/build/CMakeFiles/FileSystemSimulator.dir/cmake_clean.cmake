@@ -1,4 +1,8 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj"
+  "CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj.d"
+  "CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj"
+  "CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj.d"
   "CMakeFiles/FileSystemSimulator.dir/main.cpp.obj"
   "CMakeFiles/FileSystemSimulator.dir/main.cpp.obj.d"
   "FileSystemSimulator.exe"

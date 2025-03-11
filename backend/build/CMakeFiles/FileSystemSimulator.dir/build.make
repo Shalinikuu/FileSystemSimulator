@@ -52,10 +52,10 @@ RM = "C:\Program Files\CMake\bin\cmake.exe" -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend
+CMAKE_SOURCE_DIR = C:\CODES\PBL_GITHUB\FileSystemSimulator\backend
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build
+CMAKE_BINARY_DIR = C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/FileSystemSimulator.dir/depend.make
@@ -73,32 +73,69 @@ CMakeFiles/FileSystemSimulator.dir/codegen:
 
 CMakeFiles/FileSystemSimulator.dir/main.cpp.obj: CMakeFiles/FileSystemSimulator.dir/flags.make
 CMakeFiles/FileSystemSimulator.dir/main.cpp.obj: CMakeFiles/FileSystemSimulator.dir/includes_CXX.rsp
-CMakeFiles/FileSystemSimulator.dir/main.cpp.obj: C:/Users/marco/OneDrive/Desktop/PROJECTS/PBL_PROJECTS/FileSystemSimulator/backend/main.cpp
+CMakeFiles/FileSystemSimulator.dir/main.cpp.obj: C:/CODES/PBL_GITHUB/FileSystemSimulator/backend/main.cpp
 CMakeFiles/FileSystemSimulator.dir/main.cpp.obj: CMakeFiles/FileSystemSimulator.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/FileSystemSimulator.dir/main.cpp.obj"
-	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileSystemSimulator.dir/main.cpp.obj -MF CMakeFiles\FileSystemSimulator.dir\main.cpp.obj.d -o CMakeFiles\FileSystemSimulator.dir\main.cpp.obj -c C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/FileSystemSimulator.dir/main.cpp.obj"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileSystemSimulator.dir/main.cpp.obj -MF CMakeFiles\FileSystemSimulator.dir\main.cpp.obj.d -o CMakeFiles\FileSystemSimulator.dir\main.cpp.obj -c C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\main.cpp
 
 CMakeFiles/FileSystemSimulator.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileSystemSimulator.dir/main.cpp.i"
-	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\main.cpp > CMakeFiles\FileSystemSimulator.dir\main.cpp.i
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\main.cpp > CMakeFiles\FileSystemSimulator.dir\main.cpp.i
 
 CMakeFiles/FileSystemSimulator.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileSystemSimulator.dir/main.cpp.s"
-	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\main.cpp -o CMakeFiles\FileSystemSimulator.dir\main.cpp.s
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\main.cpp -o CMakeFiles\FileSystemSimulator.dir\main.cpp.s
+
+CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj: CMakeFiles/FileSystemSimulator.dir/flags.make
+CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj: CMakeFiles/FileSystemSimulator.dir/includes_CXX.rsp
+CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj: C:/CODES/PBL_GITHUB/FileSystemSimulator/backend/auth.cpp
+CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj: CMakeFiles/FileSystemSimulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj -MF CMakeFiles\FileSystemSimulator.dir\auth.cpp.obj.d -o CMakeFiles\FileSystemSimulator.dir\auth.cpp.obj -c C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\auth.cpp
+
+CMakeFiles/FileSystemSimulator.dir/auth.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileSystemSimulator.dir/auth.cpp.i"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\auth.cpp > CMakeFiles\FileSystemSimulator.dir\auth.cpp.i
+
+CMakeFiles/FileSystemSimulator.dir/auth.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileSystemSimulator.dir/auth.cpp.s"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\auth.cpp -o CMakeFiles\FileSystemSimulator.dir\auth.cpp.s
+
+CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj: CMakeFiles/FileSystemSimulator.dir/flags.make
+CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj: CMakeFiles/FileSystemSimulator.dir/includes_CXX.rsp
+CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj: C:/CODES/PBL_GITHUB/FileSystemSimulator/backend/globals.cpp
+CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj: CMakeFiles/FileSystemSimulator.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj -MF CMakeFiles\FileSystemSimulator.dir\globals.cpp.obj.d -o CMakeFiles\FileSystemSimulator.dir\globals.cpp.obj -c C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\globals.cpp
+
+CMakeFiles/FileSystemSimulator.dir/globals.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FileSystemSimulator.dir/globals.cpp.i"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\globals.cpp > CMakeFiles\FileSystemSimulator.dir\globals.cpp.i
+
+CMakeFiles/FileSystemSimulator.dir/globals.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FileSystemSimulator.dir/globals.cpp.s"
+	C:\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\globals.cpp -o CMakeFiles\FileSystemSimulator.dir\globals.cpp.s
 
 # Object files for target FileSystemSimulator
 FileSystemSimulator_OBJECTS = \
-"CMakeFiles/FileSystemSimulator.dir/main.cpp.obj"
+"CMakeFiles/FileSystemSimulator.dir/main.cpp.obj" \
+"CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj" \
+"CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj"
 
 # External object files for target FileSystemSimulator
 FileSystemSimulator_EXTERNAL_OBJECTS =
 
 FileSystemSimulator.exe: CMakeFiles/FileSystemSimulator.dir/main.cpp.obj
+FileSystemSimulator.exe: CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj
+FileSystemSimulator.exe: CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj
 FileSystemSimulator.exe: CMakeFiles/FileSystemSimulator.dir/build.make
+FileSystemSimulator.exe: C:/msys64/mingw64/lib/libssl.dll.a
+FileSystemSimulator.exe: C:/msys64/mingw64/lib/libcrypto.dll.a
+FileSystemSimulator.exe: C:/msys64/mingw64/lib/libz.a
 FileSystemSimulator.exe: CMakeFiles/FileSystemSimulator.dir/linkLibs.rsp
 FileSystemSimulator.exe: CMakeFiles/FileSystemSimulator.dir/objects1.rsp
 FileSystemSimulator.exe: CMakeFiles/FileSystemSimulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable FileSystemSimulator.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable FileSystemSimulator.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\FileSystemSimulator.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -110,6 +147,6 @@ CMakeFiles/FileSystemSimulator.dir/clean:
 .PHONY : CMakeFiles/FileSystemSimulator.dir/clean
 
 CMakeFiles/FileSystemSimulator.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build C:\Users\marco\OneDrive\Desktop\PROJECTS\PBL_PROJECTS\FileSystemSimulator\backend\build\CMakeFiles\FileSystemSimulator.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\CODES\PBL_GITHUB\FileSystemSimulator\backend C:\CODES\PBL_GITHUB\FileSystemSimulator\backend C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\build\CMakeFiles\FileSystemSimulator.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/FileSystemSimulator.dir/depend
 
