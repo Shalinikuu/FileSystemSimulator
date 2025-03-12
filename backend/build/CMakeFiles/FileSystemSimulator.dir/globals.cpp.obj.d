@@ -1,6 +1,6 @@
 CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj: \
- C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\globals.cpp \
- C:\CODES\PBL_GITHUB\FileSystemSimulator\backend\globals.h \
+ C:\GIT_PBL\FileSystemSimulator\backend\globals.cpp \
+ C:\GIT_PBL\FileSystemSimulator\backend\globals.h \
  C:/msys64/mingw64/include/c++/14.2.0/unordered_map \
  C:/msys64/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \

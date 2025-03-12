@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "MinGW Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "C:/CODES/PBL_GITHUB/FileSystemSimulator/backend/CMakeLists.txt"
+  "C:/GIT_PBL/FileSystemSimulator/backend/CMakeLists.txt"
   "CMakeFiles/3.31.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.31.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.31.1/CMakeRCCompiler.cmake"

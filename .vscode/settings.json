@@ -1,3 +1,9 @@
 {
-    "cmake.sourceDirectory": "C:/Users/marco/Downloads/FileSystemSimulator (4)/backend"
+    "cmake.sourceDirectory": "C:/Users/marco/Downloads/FileSystemSimulator (4)/backend",
+    "files.associations": {
+        "chrono": "cpp",
+        "functional": "cpp",
+        "thread": "cpp",
+        "xstring": "cpp"
+    }
 }

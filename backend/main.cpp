@@ -8,6 +8,7 @@
 #include <regex>
 #include <stdexcept>
 #include "globals.h"
+#include <cstdlib>
 
 namespace fs = std::filesystem;
 std::string currentDirectory = "PBL_FS";
@@ -18,11 +19,23 @@ crow::SimpleApp app; // Global declaration
 // Helper function for authentication
 crow::response authenticated(const crow::request &req, std::function<crow::response(std::string)> handler)
 {
+    auto authHeader = req.get_header_value("Authorization");
+    if (authHeader.empty() || authHeader.find("Bearer ") != 0)
+    {
+        return crow::response(401, "Unauthorized: No token provided");
+    }
+
+    std::string token = authHeader.substr(7); // Remove "Bearer " prefix
     std::string username;
-    if (!isAuthenticated(req, username))
+    if (verifyJWT(token, username))
+    {
+        // JWT is valid, proceed with username
+    }
+    else
     {
         return crow::response(401, "Unauthorized");
     }
+
     return handler(username);
 }
 
@@ -80,6 +93,7 @@ bool createDirectory(const std::string &folderName)
     }
 }
 
+// Remove directory
 crow::response removeDirectory(const crow::request &req, const std::string &folderName, const std::string &username)
 {
     if (!isValidFileName(folderName))
@@ -87,19 +101,20 @@ crow::response removeDirectory(const crow::request &req, const std::string &fold
         return crow::response(400, "Invalid folder name");
     }
 
-    std::string folderPath = userDirectories[username] + "/" + folderName; // Use user's current directory
+    std::string folderPath = userDirectories[username] + "/" + folderName;
 
     std::error_code ec;
     if (fs::remove_all(folderPath, ec))
     {
-        return crow::response(200, "✅ Directory removed successfully"); // Success message
+        return crow::response(200, "✅ Directory removed successfully");
     }
     else
     {
-        return crow::response(500, "❌ Failed to remove directory: " + ec.message()); // Failure message
+        return crow::response(500, "❌ Failed to remove directory: " + ec.message());
     }
 }
 
+// Create file in the current directory
 bool createFileInCurrentDirectory(const std::string &username, const std::string &fileName, const std::string &content)
 {
     if (!isValidFileName(fileName))
@@ -108,7 +123,7 @@ bool createFileInCurrentDirectory(const std::string &username, const std::string
     // Ensure user stays inside their directory
     std::string userRoot = "PBL_FS/" + username;
     if (userDirectories[username].find(userRoot) != 0)
-    { // Corrected line
+    {
         std::cerr << "❌ Access denied! Cannot create files outside user directory." << std::endl;
         return false;
     }
@@ -371,12 +386,8 @@ int main()
     // Create folder inside user-specific directory
     CROW_ROUTE(app, "/mkdir/<string>")
         .methods(crow::HTTPMethod::Post)([](const crow::request &req, std::string foldername)
-                                         {
-        if (createDirectory(foldername)) {
-            return crow::response(200, "✅ Directory created successfully");
-        } else {
-            return crow::response(500, "❌ Failed to create directory");
-        } });
+                                         { return authenticated(req, [&](std::string username)
+                                                                { return createDirectory(username + "/" + foldername) ? crow::response(200, "✅ Directory created") : crow::response(500, "❌ Failed"); }); });
 
     // Delete folder inside user-specific directory
     CROW_ROUTE(app, "/rmdir/<string>")
@@ -413,6 +424,17 @@ int main()
             }
             return crow::response(content); }); });
 
+    CROW_ROUTE(app, "/pwd")
+        .methods(crow::HTTPMethod::GET)([](const crow::request &req)
+                                        { return authenticated(req, [&](std::string username)
+                                                               { return crow::response(200, userDirectories[username]); }); });
+
+    // Start voice command
+    CROW_ROUTE(app, "/start-voice").methods("POST"_method)([]()
+                                                           {
+                                                            system("start /B python ../voice_control.py");
+                                                                return crow::response(200, "{\"message\": \"Voice command started\"}"); });
+
     // List directory contents
     CROW_ROUTE(app, "/ls")
         .methods(crow::HTTPMethod::GET)([](const crow::request &req)
@@ -427,10 +449,9 @@ int main()
 
     // Append to file in the current directory
     CROW_ROUTE(app, "/append-file/<string>")
-        .methods(crow::HTTPMethod::PUT)([](const crow::request &req, std::string fileName) {
-            return authenticated(req, [&](std::string username)
-                                 { return appendToFileInCurrentDirectory(req, username, fileName); });
-        });
+        .methods(crow::HTTPMethod::PUT)([](const crow::request &req, std::string fileName)
+                                        { return authenticated(req, [&](std::string username)
+                                                               { return appendToFileInCurrentDirectory(req, username, fileName); }); });
 
     // Change Directory (cd)
     CROW_ROUTE(app, "/cd/<string>")

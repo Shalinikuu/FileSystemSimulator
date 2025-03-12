@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <jwt-cpp/jwt.h> // Include the jwt-cpp header
+#include <jwt-cpp/jwt.h>
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -137,7 +137,8 @@ bool registerUser(const std::string &username, const std::string &password)
 }
 
 // Login User
-bool loginUser(const std::string &username, const std::string &password) // Add password argument
+
+bool loginUser(const std::string &username, const std::string &password)
 {
     json users = loadUsers();
     if (!users.contains(username) || users[username].get<std::string>() != password)
@@ -145,9 +146,8 @@ bool loginUser(const std::string &username, const std::string &password) // Add 
         return false; // Invalid username or password
     }
 
-    std::string userDirectory = "PBL_FS/" + username; // Declare and initialize userDirectory
-
-    // Set the current directory to the user's home directory
+    std::string userDirectory = "PBL_FS/" + username;
+    std::string originalDirectory = currentDirectory; // Save the current directory
     currentDirectory = userDirectory;
 
     if (!fs::exists(userDirectory))
@@ -157,5 +157,50 @@ bool loginUser(const std::string &username, const std::string &password) // Add 
     }
 
     std::cout << "✅ User logged in. Current directory: " << currentDirectory << std::endl;
+
+    // 🔐 Generate and save token
+    std::string token = generateJWT(username);
+
+    // Save token to file
+    std::ofstream tokenFile("token.txt", std::ios::out | std::ios::trunc);
+    if (tokenFile.is_open())
+    {
+        tokenFile << token;
+        tokenFile.close();
+        std::cout << "🔐 Token saved to token.txt\n";
+    }
+    else
+    {
+        std::cerr << "❌ Failed to create token.txt! Trying to create manually...\n";
+
+        // Try manually creating the file
+        std::ofstream createFile("../token.txt");
+        if (createFile.is_open())
+        {
+            createFile.close();
+            std::cout << "✅ token.txt created successfully. Retrying token save...\n";
+
+            // Retry writing token
+            std::ofstream retryTokenFile("token.txt");
+            if (retryTokenFile.is_open())
+            {
+                retryTokenFile << token;
+                retryTokenFile.close();
+                std::cout << "🔐 Token saved successfully!\n";
+            }
+            else
+            {
+                std::cerr << "❌ Still failed to save token!\n";
+            }
+        }
+        else
+        {
+            std::cerr << "❌ Could not manually create token.txt!\n";
+        }
+    }
+
+    // Restore the original directory
+    currentDirectory = originalDirectory;
+
     return true;
 }
