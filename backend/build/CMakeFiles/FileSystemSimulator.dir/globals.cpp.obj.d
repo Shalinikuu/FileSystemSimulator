@@ -1,6 +1,6 @@
 CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj: \
- C:\GIT_PBL\FileSystemSimulator\backend\globals.cpp \
- C:\GIT_PBL\FileSystemSimulator\backend\globals.h \
+ C:\Users\marco\OneDrive\Desktop\GIT_PBL\#\FileSystemSimulator\backend\globals.cpp \
+ C:\Users\marco\OneDrive\Desktop\GIT_PBL\#\FileSystemSimulator\backend\globals.h \
  C:/msys64/mingw64/include/c++/14.2.0/unordered_map \
  C:/msys64/mingw64/include/c++/14.2.0/bits/requires_hosted.h \
  C:/msys64/mingw64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -71,6 +71,7 @@ CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj: \
  C:/msys64/mingw64/include/wchar.h \
  C:/msys64/mingw64/include/corecrt_stdio_config.h \
  C:/msys64/mingw64/include/corecrt_wstdlib.h \
+ C:/msys64/mingw64/include/corecrt_wctype.h \
  C:/msys64/mingw64/include/_mingw_off_t.h \
  C:/msys64/mingw64/include/_mingw_stat64.h \
  C:/msys64/mingw64/include/swprintf.inl \
