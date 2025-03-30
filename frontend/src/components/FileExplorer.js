@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fileSystemService, authService } from '../api';
-import { FaFolder, FaFile, FaArrowUp, FaPlus, FaTrash, FaEdit, FaPen, FaSave, FaMicrophone, FaCheck, FaSun, FaMoon } from 'react-icons/fa';
+import { FaFolder, FaFile, FaArrowUp, FaTrash, FaEdit, FaPen, FaSave, FaMicrophone, FaCheck, FaSun, FaMoon } from 'react-icons/fa';
 import './FileExplorer.css';
 
 const FileExplorer = () => {
@@ -22,12 +22,38 @@ const FileExplorer = () => {
   const [recognitionInterval, setRecognitionInterval] = useState(null);
   const [successNotification, setSuccessNotification] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
+  const [itemToRename, setItemToRename] = useState(null);
+  const [newItemName, setNewItemName] = useState('');
   const navigate = useNavigate();
 
-  const fetchFiles = async () => {
+  const handleLogout = () => {
+    try {
+      console.log('Logging out...');
+      // First clear the auth data
+      authService.logout();
+      console.log('Auth data cleared');
+      
+      // Force navigation to login page and reload to reset state
+      console.log('Redirecting to login page');
+      window.location.href = '/';
+    } catch (err) {
+      console.error('Logout error:', err);
+      // Fallback navigation
+      navigate('/');
+    }
+  };
+
+  const fetchFiles = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
+      
+      // Set a timeout to prevent being stuck in loading state forever
+      const timeoutId = setTimeout(() => {
+        console.log('Fetch files timeout reached, forcing loading to false');
+        setLoading(false);
+        setError('Request timed out. Please try again.');
+      }, 10000); // 10 second timeout
       
       // Fetch current directory first
       console.log('Fetching current directory...');
@@ -45,6 +71,9 @@ const FileExplorer = () => {
       console.log('Fetching files in directory...');
       const response = await fileSystemService.listFiles();
       console.log('List files raw response:', response);
+      
+      // Clear the timeout since we got a response
+      clearTimeout(timeoutId);
       
       // Check if the response has an items property
       if (response.data && response.data.items) {
@@ -74,16 +103,24 @@ const FileExplorer = () => {
       console.error('Error fetching files:', err);
       setError('Failed to load files: ' + (err.response?.data || err.message));
       if (err.response?.status === 401) {
-        // Handle unauthorized
-        console.warn('Unauthorized access detected, logging out...');
-        handleLogout();
+        // Handle unauthorized by redirecting to login
+        console.warn('Unauthorized access detected, redirecting to login');
+        authService.logout();
+        navigate('/');
       }
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
+    // Check if user is authenticated before trying to fetch files
+    if (!authService.isAuthenticated()) {
+      console.log('User not authenticated, redirecting to login');
+      navigate('/');
+      return;
+    }
+    
     fetchFiles();
     
     // Set up initial theme based on local storage
@@ -92,12 +129,19 @@ const FileExplorer = () => {
       setDarkMode(true);
       document.body.classList.add('dark-mode');
     }
-    
-    // Test the success notification system on initial load
-    setTimeout(() => {
-      setSuccessNotification("Welcome to File System Simulator!");
-      setTimeout(() => setSuccessNotification(null), 5000);
-    }, 1000);
+  }, [fetchFiles, navigate]);
+
+  // Separate useEffect for welcome notification to prevent it from showing on every render
+  useEffect(() => {
+    // Show welcome notification only on initial load
+    const hasShownWelcome = sessionStorage.getItem('welcomeShown');
+    if (!hasShownWelcome) {
+      setTimeout(() => {
+        setSuccessNotification("Welcome to File System Simulator!");
+        setTimeout(() => setSuccessNotification(null), 5000);
+        sessionStorage.setItem('welcomeShown', 'true');
+      }, 1000);
+    }
   }, []);
 
   const handleStartVoiceCommand = async () => {
@@ -143,8 +187,6 @@ const FileExplorer = () => {
       const response = await fileSystemService.startVoiceCommand();
       console.log('Voice command response:', response);
       
-      let listeningTimeout = null;
-      
       // Poll for voice recognition updates
       console.log('Setting up polling for voice status updates...');
       const interval = setInterval(async () => {
@@ -169,22 +211,34 @@ const FileExplorer = () => {
             
             // PRIORITY 1: Check for special formatted messages first (exact match format)
             if (currentStatus.startsWith('FOLDER_CREATED_') || 
-                currentStatus.startsWith('FILE_CREATED_')) {
+                currentStatus.startsWith('FILE_CREATED_') ||
+                currentStatus.startsWith('RENAME_SUCCESS_')) {
               
               let actionType = 'unknown';
               let itemName = '';
+              let displayMessage = '';
               
               if (currentStatus.startsWith('FOLDER_CREATED_')) {
-                actionType = 'folder';
+                actionType = 'folder-create';
                 itemName = currentStatus.replace('FOLDER_CREATED_', '');
+                displayMessage = `Folder "${itemName}" created successfully!`;
               } else if (currentStatus.startsWith('FILE_CREATED_')) {
-                actionType = 'file';
+                actionType = 'file-create';
                 itemName = currentStatus.replace('FILE_CREATED_', '');
+                displayMessage = `File "${itemName}" created successfully!`;
+              } else if (currentStatus.startsWith('RENAME_SUCCESS_')) {
+                actionType = 'rename';
+                // Format is RENAME_SUCCESS_oldname_TO_newname
+                const renameParts = currentStatus.replace('RENAME_SUCCESS_', '').split('_TO_');
+                if (renameParts.length === 2) {
+                  displayMessage = `"${renameParts[0]}" renamed to "${renameParts[1]}" successfully!`;
+                } else {
+                  displayMessage = "Item renamed successfully!";
+                }
               }
               
-              const displayMessage = `${actionType === 'folder' ? 'Folder' : 'File'} "${itemName}" created successfully!`;
-              
-              console.log('SUCCESS DETECTED - SPECIAL FORMAT:', displayMessage);
+              // Use actionType for analytics or logging purposes
+              console.log('SUCCESS DETECTED - SPECIAL FORMAT:', displayMessage, 'Action type:', actionType);
               
               // Force refresh files
               await fetchFiles();
@@ -241,23 +295,6 @@ const FileExplorer = () => {
       }
     };
   }, [recognitionInterval]);
-
-  const handleLogout = () => {
-    try {
-      console.log('Logging out...');
-      // First clear the auth data
-      authService.logout();
-      console.log('Auth data cleared');
-      
-      // Force navigation to login page and reload to reset state
-      console.log('Redirecting to login page');
-      window.location.href = '/';
-    } catch (err) {
-      console.error('Logout error:', err);
-      // Fallback navigation
-      navigate('/');
-    }
-  };
 
   const handleNavigate = async (path) => {
     try {
@@ -401,50 +438,6 @@ const FileExplorer = () => {
     }
   };
 
-  const updateVoiceStatus = useCallback(() => {
-    if (voiceActive) {
-      console.log("Polling for voice status...");
-      
-      fileSystemService.getVoiceStatus()
-        .then(response => {
-          console.log("Voice status response:", response.data);
-          const currentStatus = response.data.text || "";
-          const isCompleted = response.data.completed || false;
-          
-          // Update voice text with current status
-          setVoiceText(currentStatus);
-          
-          // Check for success messages explicitly
-          if (currentStatus.includes("Folder created") || 
-              currentStatus.includes("File created") || 
-              currentStatus.includes("File opened") ||
-              currentStatus.includes("Item deleted")) {
-            console.log("SUCCESS DETECTED:", currentStatus);
-            
-            // Set success notification with the message
-            setSuccessNotification(currentStatus);
-            
-            // Refresh the file list to show new changes
-            fetchFiles();
-            
-            // Clear success notification after 10 seconds
-            setTimeout(() => {
-              setSuccessNotification(null);
-            }, 10000);
-          }
-          
-          // Handle completion
-          if (isCompleted) {
-            console.log("Voice command completed");
-            setTimeout(() => {
-              setVoiceActive(false);
-              setVoiceText(null);
-            }, 3000); // Keep final message visible for 3 seconds
-          }
-        });
-    }
-  }, []);
-
   const toggleDarkMode = () => {
     setDarkMode(prevMode => {
       const newMode = !prevMode;
@@ -461,6 +454,9 @@ const FileExplorer = () => {
   };
 
   // Enhanced function to specifically handle voice commands
+  // This function is defined for future expansion of voice command features
+  // and can be called from handleStartVoiceCommand as needed
+  // eslint-disable-next-line no-unused-vars
   const processVoiceCommandStatus = async (status) => {
     console.log('Processing voice command status:', status);
     
@@ -543,6 +539,35 @@ const FileExplorer = () => {
       delete window.testNotification;
     };
   }, []);
+
+  const handleRenameItem = async () => {
+    if (!itemToRename || !newItemName.trim()) {
+      return;
+    }
+    
+    try {
+      setError('');
+      console.log(`Renaming ${itemToRename} to ${newItemName}`);
+      
+      // Call the API to rename the item
+      const response = await fileSystemService.renameItem(itemToRename, newItemName);
+      console.log('Rename response:', response);
+      
+      // Set success notification
+      setSuccessNotification(`Renamed ${itemToRename} to ${newItemName} successfully`);
+      setTimeout(() => setSuccessNotification(null), 5000);
+      
+      // Reset state
+      setItemToRename(null);
+      setNewItemName('');
+      
+      // Refresh the file list
+      await fetchFiles();
+    } catch (err) {
+      console.error('Error renaming item:', err);
+      setError('Failed to rename item: ' + (err.response?.data || err.message));
+    }
+  };
 
   return (
     <>
@@ -659,6 +684,48 @@ const FileExplorer = () => {
           </div>
         )}
         
+        {itemToRename && (
+          <div className="modal-backdrop">
+            <div className="modal-content">
+              <h3>
+                {/* Determine if it's a file or folder based on the file list */}
+                {files.find(item => item.name === itemToRename)?.type === 'directory' 
+                  ? <><FaFolder className="modal-icon folder" /> Rename Folder</>
+                  : <><FaFile className="modal-icon file" /> Rename File</>
+                }
+              </h3>
+              <div className="modal-form">
+                <div className="form-group">
+                  <label>Current Name:</label>
+                  <div className="current-name">{itemToRename}</div>
+                </div>
+                <div className="form-group">
+                  <label>New Name:</label>
+                  <input
+                    type="text"
+                    value={newItemName}
+                    onChange={(e) => setNewItemName(e.target.value)}
+                    placeholder="Enter new name"
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <div className="modal-actions">
+                <button 
+                  onClick={handleRenameItem}
+                  disabled={!newItemName.trim() || newItemName === itemToRename}
+                >
+                  Rename
+                </button>
+                <button onClick={() => {
+                  setItemToRename(null);
+                  setNewItemName('');
+                }}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <div className="explorer-container">
           <div className="file-list">
             <h3>Files and Folders</h3>
@@ -683,8 +750,23 @@ const FileExplorer = () => {
                       </div>
                       <div className="file-actions">
                         <button 
-                          onClick={() => handleDeleteItem(item.name, item.type === 'directory')}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setItemToRename(item.name);
+                            setNewItemName(item.name);
+                          }}
+                          className="file-action-btn rename"
+                          title="Rename"
+                        >
+                          <FaPen />
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteItem(item.name, item.type === 'directory');
+                          }}
                           className="file-action-btn delete"
+                          title="Delete"
                         >
                           <FaTrash />
                         </button>

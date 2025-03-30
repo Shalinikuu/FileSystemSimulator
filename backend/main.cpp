@@ -809,6 +809,42 @@ int main()
             return res;
         });
 
+    // Add rename file/folder endpoint
+    CROW_ROUTE(app, "/rename/<string>/<string>")
+        .methods("POST"_method)
+        ([](const crow::request &req, const std::string &oldName, const std::string &newName) {
+            return authenticated(req, [&oldName, &newName](std::string username) {
+                std::lock_guard<std::mutex> lock(fileMutex);
+                
+                if (!isValidFileName(oldName) || !isValidFileName(newName)) {
+                    return crow::response(400, "Invalid file or folder name");
+                }
+                
+                std::string userDirectory = userDirectories[username];
+                std::string oldPath = userDirectory + "/" + oldName;
+                std::string newPath = userDirectory + "/" + newName;
+                
+                // Check if old path exists
+                if (!fs::exists(oldPath)) {
+                    return crow::response(404, "File or folder not found");
+                }
+                
+                // Check if new path already exists
+                if (fs::exists(newPath)) {
+                    return crow::response(409, "Destination already exists");
+                }
+                
+                try {
+                    fs::rename(oldPath, newPath);
+                    std::cout << "✅ Renamed: " << oldPath << " to " << newPath << std::endl;
+                    return crow::response(200, "Item renamed successfully");
+                } catch (const std::exception &e) {
+                    std::cerr << "❌ Error renaming item: " << e.what() << std::endl;
+                    return crow::response(500, "Failed to rename item: " + std::string(e.what()));
+                }
+            });
+        });
+
     std::cout << "🚀 Server running at http://localhost:8080" << std::endl;
     app.port(8080).multithreaded().run();
 }

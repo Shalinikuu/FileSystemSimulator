@@ -89,12 +89,28 @@ export const authService = {
 export const fileSystemService = {
   // List directory contents
   listFiles: async () => {
-    return await api.get('/ls');
+    console.log("API CALL: Listing files");
+    try {
+      const response = await api.get('/ls');
+      console.log("API RESPONSE - listFiles:", response);
+      return response;
+    } catch (error) {
+      console.error("API ERROR - listFiles:", error);
+      throw error;
+    }
   },
   
   // Get current directory
   getCurrentDirectory: async () => {
-    return await api.get('/pwd');
+    console.log("API CALL: Getting current directory");
+    try {
+      const response = await api.get('/pwd');
+      console.log("API RESPONSE - getCurrentDirectory:", response);
+      return response;
+    } catch (error) {
+      console.error("API ERROR - getCurrentDirectory:", error);
+      throw error;
+    }
   },
   
   // Create directory
@@ -130,6 +146,11 @@ export const fileSystemService = {
   // Delete file
   deleteFile: async (fileName) => {
     return await api.delete(`/delete-file/${fileName}`);
+  },
+  
+  // Rename item (file or directory)
+  renameItem: async (oldName, newName) => {
+    return await api.post(`/rename/${oldName}/${newName}`);
   },
   
   // Change directory

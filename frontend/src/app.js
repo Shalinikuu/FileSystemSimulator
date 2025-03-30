@@ -46,11 +46,31 @@ function App() {
     console.log("Auth status on load:", authStatus);
     setIsAuthenticated(authStatus);
     
+    // Initialize dark mode from localStorage
+    const savedTheme = localStorage.getItem('darkMode');
+    if (savedTheme === 'true') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+    
     // Add event listener for storage changes (for logout in other tabs)
-    const handleStorageChange = () => {
-      const currentAuthStatus = authService.isAuthenticated();
-      console.log("Auth status changed:", currentAuthStatus);
-      setIsAuthenticated(currentAuthStatus);
+    const handleStorageChange = (event) => {
+      // Handle auth status change
+      if (event.key === 'token') {
+        const currentAuthStatus = authService.isAuthenticated();
+        console.log("Auth status changed:", currentAuthStatus);
+        setIsAuthenticated(currentAuthStatus);
+      }
+      
+      // Handle theme change
+      if (event.key === 'darkMode') {
+        if (event.newValue === 'true') {
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.remove('dark-mode');
+        }
+      }
     };
     
     window.addEventListener('storage', handleStorageChange);

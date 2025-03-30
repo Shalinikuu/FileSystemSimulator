@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../api';
+import { FaSun, FaMoon, FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Login.css';
 
 const Register = () => {
@@ -9,7 +10,44 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+
+  // Check for existing theme preference on component mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('darkMode');
+    if (savedTheme === 'true') {
+      setDarkMode(true);
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setDarkMode(prevMode => {
+      const newMode = !prevMode;
+      localStorage.setItem('darkMode', newMode);
+      
+      if (newMode) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+      
+      return newMode;
+    });
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,9 +95,17 @@ const Register = () => {
 
   return (
     <div className="auth-container">
+      <button 
+        className="theme-toggle" 
+        onClick={toggleDarkMode} 
+        title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+      >
+        {darkMode ? <FaSun /> : <FaMoon />}
+      </button>
+      
       <div className="auth-form">
-        <h2>File System Explorer</h2>
-        <h3>Create Account</h3>
+        <h2>File System Simulator</h2>
+        <h3>Create Your Account</h3>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -68,29 +114,52 @@ const Register = () => {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              placeholder="Choose a username"
               required
             />
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="password-input-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Create a password"
+                required
+              />
+              <button 
+                type="button" 
+                className="toggle-password" 
+                onClick={toggleShowPassword}
+                title={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <div className="form-group">
             <label>Confirm Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div className="password-input-container">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
+                required
+              />
+              <button 
+                type="button" 
+                className="toggle-password" 
+                onClick={toggleShowConfirmPassword}
+                title={showConfirmPassword ? "Hide password" : "Show password"}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <button type="submit" disabled={loading} className="auth-button">
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? 'Registering...' : 'Create Account'}
           </button>
         </form>
         <p className="auth-link">

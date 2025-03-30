@@ -1,94 +1,266 @@
+/* Base styling */
+:root {
+  --primary-color: #3498db;
+  --primary-hover: #2980b9;
+  --light-bg: #f5f7fa;
+  --light-form-bg: #ffffff;
+  --light-text: #2c3e50;
+  --light-text-secondary: #7f8c8d;
+  --light-input-border: #ddd;
+  --light-error-bg: #f8d7da;
+  --light-error-text: #721c24;
+  
+  --dark-bg: #1a1c23;
+  --dark-form-bg: #282c34;
+  --dark-text: #e0e0e0;
+  --dark-text-secondary: #a0a0a0;
+  --dark-input-bg: #3b4048;
+  --dark-input-border: #4a4e57;
+  --dark-error-bg: #4a232b;
+  --dark-error-text: #f8a9b0;
+}
+
+body.dark-mode .auth-container {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background-color: var(--light-bg);
+  transition: background-color 0.3s ease;
 }
 
 .auth-form {
   width: 100%;
   max-width: 400px;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  background-color: var(--light-form-bg);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .auth-form {
+  background-color: var(--dark-form-bg);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
 .auth-form h2 {
-  color: #2c3e50;
+  color: var(--light-text);
   margin-bottom: 0.5rem;
   text-align: center;
+  font-size: 1.8rem;
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .auth-form h2 {
+  color: var(--dark-text);
 }
 
 .auth-form h3 {
-  color: #7f8c8d;
-  margin-bottom: 1.5rem;
+  color: var(--light-text-secondary);
+  margin-bottom: 1.8rem;
   text-align: center;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .auth-form h3 {
+  color: var(--dark-text-secondary);
 }
 
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #2c3e50;
+  color: var(--light-text);
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .form-group label {
+  color: var(--dark-text);
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--light-input-border);
+  border-radius: 8px;
   font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: var(--light-form-bg);
+  color: var(--light-text);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+body.dark-mode .form-group input {
+  background-color: var(--dark-input-bg);
+  border-color: var(--dark-input-border);
+  color: var(--dark-text);
+}
+
+body.dark-mode .form-group input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+/* Password input container styling */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  padding-right: 45px; /* Make room for the toggle button */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--light-text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  z-index: 2;
+}
+
+.toggle-password:hover {
+  color: var(--primary-color);
+}
+
+body.dark-mode .toggle-password {
+  color: var(--dark-text-secondary);
+}
+
+body.dark-mode .toggle-password:hover {
+  color: var(--primary-color);
 }
 
 .auth-button {
   width: 100%;
-  padding: 0.75rem;
-  margin-top: 1rem;
-  background-color: #3498db;
+  padding: 0.9rem;
+  margin-top: 1.5rem;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
 }
 
 .auth-button:hover {
-  background-color: #2980b9;
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
 }
 
 .auth-button:disabled {
   background-color: #95a5a6;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .auth-link {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  color: var(--light-text-secondary);
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .auth-link {
+  color: var(--dark-text-secondary);
 }
 
 .auth-link a {
-  color: #3498db;
+  color: var(--primary-color);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .auth-link a:hover {
   text-decoration: underline;
+  color: var(--primary-hover);
 }
 
 .error-message {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
+  background-color: var(--light-error-bg);
+  color: var(--light-error-text);
+  padding: 0.85rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .error-message {
+  background-color: var(--dark-error-bg);
+  color: var(--dark-error-text);
+}
+
+/* Theme toggle for login/register pages */
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: var(--light-text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.3s ease;
+}
+
+body.dark-mode .theme-toggle {
+  color: var(--dark-text);
+}
+
+.theme-toggle:hover {
+  color: var(--primary-color);
+}
+
+/* Animation for auth forms */
+.auth-form {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 } 
