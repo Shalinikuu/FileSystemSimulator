@@ -133,6 +133,7 @@ const Terminal = ({ currentPath, onCommandExecuted }) => {
 Available commands:
   ls              - List directory contents
   cd <dir>        - Change directory
+  cd ..           - moveup dir
   mkdir <dir>     - Create directory
   touch/create <file> - Create file
   rm <file>       - Remove file

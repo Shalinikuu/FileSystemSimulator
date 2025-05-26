@@ -73,29 +73,31 @@ bool isValidFileName(const std::string &name)
 }
 
 // File System Operations
-bool createDirectory(const std::string &folderName)
+bool createDirectory(const std::string &username, const std::string &folderName)
 {
-    std::string newPath;
-
-    // Handle absolute and relative paths
-    if (folderName.find("PBL_FS/") == 0)
+    if (!isValidFileName(folderName))
     {
-        newPath = folderName; // Absolute path
-    }
-    else
-    {
-        newPath = currentDirectory + "/" + folderName; // Append to current directory
+        std::cerr << "❌ Invalid folder name" << std::endl;
+        return false;
     }
 
-    // Use mkdir() to create the directory with permissions
-    if (mkdir(newPath.c_str()) == 0)
+    // Get the user's current directory
+    if (userDirectories.find(username) == userDirectories.end())
+    {
+        userDirectories[username] = "PBL_FS/" + username;
+    }
+
+    std::string newPath = userDirectories[username] + "/" + folderName;
+
+    std::error_code ec;
+    if (fs::create_directories(newPath, ec))
     {
         std::cout << "✅ Directory created: " << newPath << std::endl;
         return true;
     }
     else
     {
-        perror("❌ mkdir failed"); // Prints system error
+        std::cerr << "❌ Failed to create directory: " << ec.message() << std::endl;
         return false;
     }
 }
@@ -314,34 +316,48 @@ crow::response appendToFileInCurrentDirectory(const crow::request &req, const st
 }
 
 // Change directory
-bool changeDirectory(std::string &currentDirectory, const std::string &username, const std::string &newPath)
+crow::json::wvalue changeDirectory(const std::string &username, const std::string &newPath)
 {
+    // Get the user's current directory from the global state
+    if (userDirectories.find(username) == userDirectories.end())
+    {
+        userDirectories[username] = "PBL_FS/" + username;
+    }
+
     std::filesystem::path userRoot = "PBL_FS/" + username;
-    std::filesystem::path currentPath = currentDirectory;
+    std::filesystem::path currentPath = userDirectories[username];
 
     if (newPath == "..") // Go back one directory
     {
         if (currentPath == userRoot) // Prevent going above user root
         {
             std::cerr << "⚠️ You are already at the root directory!" << std::endl;
-            return false;
+            return {{"status", "error"}, {"message", "Already at root directory"}, {"currentDir", currentPath.string()}};
         }
-        currentDirectory = currentPath.parent_path().string();
-        return true;
+        userDirectories[username] = currentPath.parent_path().string();
+        return {{"status", "success"}, {"currentDir", userDirectories[username]}};
     }
     else
     {
         std::filesystem::path potentialPath = currentPath / newPath;
 
+        // Verify the new path is within the user's root directory
+        std::string potentialPathStr = potentialPath.string();
+        if (potentialPathStr.find(userRoot.string()) != 0)
+        {
+            std::cerr << "❌ Cannot navigate outside user's directory" << std::endl;
+            return {{"status", "error"}, {"message", "Cannot navigate outside user directory"}, {"currentDir", currentPath.string()}};
+        }
+
         if (std::filesystem::exists(potentialPath) && std::filesystem::is_directory(potentialPath))
         {
-            currentDirectory = potentialPath.string();
-            return true;
+            userDirectories[username] = potentialPathStr;
+            return {{"status", "success"}, {"currentDir", userDirectories[username]}};
         }
         else
         {
             std::cerr << "❌ Directory does not exist: " << potentialPath << std::endl;
-            return false;
+            return {{"status", "error"}, {"message", "Directory does not exist"}, {"currentDir", currentPath.string()}};
         }
     }
 }
@@ -560,7 +576,7 @@ int main()
                 
                 // Initialize user directory on login
                 userDirectories[username] = "PBL_FS/" + username;
-                changeDirectory(userDirectories[username], username, "");
+                changeDirectory(userDirectories[username], "");
 
                 res.code = 200;
                 res.body = crow::json::wvalue({
@@ -602,7 +618,7 @@ int main()
     CROW_ROUTE(app, "/mkdir/<string>")
         .methods(crow::HTTPMethod::Post)([&authenticatedWithCors](const crow::request &req, std::string foldername)
                                          { return authenticatedWithCors(req, [&](std::string username)
-                                                                { return createDirectory(username + "/" + foldername) ? crow::response(200, "✅ Directory created") : crow::response(500, "❌ Failed"); }); });
+                                                                { return createDirectory(username, foldername) ? crow::response(200, "✅ Directory created") : crow::response(500, "❌ Failed"); }); });
 
     // Start voice command
     CROW_ROUTE(app, "/start-voice")
@@ -751,17 +767,8 @@ int main()
         .methods(crow::HTTPMethod::Post)([&authenticatedWithCors](const crow::request &req, std::string folderName)
                                          { return authenticatedWithCors(req, [&](std::string username)
                                                                 {
-    // Remove local declaration of userDirectories
-    if (userDirectories.find(username) == userDirectories.end()) {
-        userDirectories[username] = "PBL_FS/" + username;
-    }
-
-    bool success = changeDirectory(userDirectories[username], username, folderName);
-
-    return crow::json::wvalue({
-        {"status", success ? "success" : "error"},
-        {"currentDir", userDirectories[username]}
-    }); }); });
+            auto result = changeDirectory(username, folderName);
+            return crow::response(200, result.dump()); }); });
 
     // Move Up (cd ..)
     CROW_ROUTE(app, "/cd..")

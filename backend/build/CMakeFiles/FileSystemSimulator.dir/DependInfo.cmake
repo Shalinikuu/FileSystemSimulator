@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/marco/OneDrive/Desktop/GIT_PBL_FINAL/FileSystemSimulator/backend/auth.cpp" "CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj" "gcc" "CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj.d"
-  "C:/Users/marco/OneDrive/Desktop/GIT_PBL_FINAL/FileSystemSimulator/backend/globals.cpp" "CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj" "gcc" "CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj.d"
-  "C:/Users/marco/OneDrive/Desktop/GIT_PBL_FINAL/FileSystemSimulator/backend/main.cpp" "CMakeFiles/FileSystemSimulator.dir/main.cpp.obj" "gcc" "CMakeFiles/FileSystemSimulator.dir/main.cpp.obj.d"
+  "C:/Users/marco/OneDrive/Desktop/PROJECTS/PBL_FINAL/FileSystemSimulator/backend/auth.cpp" "CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj" "gcc" "CMakeFiles/FileSystemSimulator.dir/auth.cpp.obj.d"
+  "C:/Users/marco/OneDrive/Desktop/PROJECTS/PBL_FINAL/FileSystemSimulator/backend/globals.cpp" "CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj" "gcc" "CMakeFiles/FileSystemSimulator.dir/globals.cpp.obj.d"
+  "C:/Users/marco/OneDrive/Desktop/PROJECTS/PBL_FINAL/FileSystemSimulator/backend/main.cpp" "CMakeFiles/FileSystemSimulator.dir/main.cpp.obj" "gcc" "CMakeFiles/FileSystemSimulator.dir/main.cpp.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
