@@ -58,7 +58,35 @@ const Terminal = ({ currentPath, onCommandExecuted }) => {
                         setOutputHistory(prev => [...prev, { text: 'Usage: cd <directory>', type: 'error' }]);
                         return;
                     }
-                    response = await fileSystemService.changeDirectory(args[0]);
+                    try {
+                        // Check if trying to go above root with cd ..
+                        if (args[0] === '..') {
+                            response = await fileSystemService.moveUpDirectory();
+                        } else {
+                            response = await fileSystemService.changeDirectory(args[0]);
+                        }
+                        
+                        if (response && response.data) {
+                            // Update current directory in UI
+                            if (response.data.currentDir) {
+                                onCommandExecuted(); // Refresh the file explorer
+                                setOutputHistory(prev => [...prev, { 
+                                    text: `Changed directory to: ${response.data.currentDir}`, 
+                                    type: 'output' 
+                                }]);
+                            } else if (response.data.status === 'error') {
+                                setOutputHistory(prev => [...prev, { 
+                                    text: response.data.message || 'Failed to change directory', 
+                                    type: 'error' 
+                                }]);
+                            }
+                        }
+                    } catch (error) {
+                        setOutputHistory(prev => [...prev, { 
+                            text: `Failed to change directory: ${error.response?.data || error.message}`, 
+                            type: 'error' 
+                        }]);
+                    }
                     shouldRefresh = true;
                     break;
                 case 'mkdir':
