@@ -8,6 +8,7 @@ const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
   withCredentials: false // Important for CORS
 });
@@ -19,22 +20,45 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    // Ensure content type is set for all requests
-    config.headers['Content-Type'] = 'application/json';
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+// Add response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error);
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error('Response data:', error.response.data);
+      console.error('Response status:', error.response.status);
+      console.error('Response headers:', error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.error('No response received:', error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error setting up request:', error.message);
+    }
+    return Promise.reject(error);
+  }
 );
 
 // Auth services
 export const authService = {
   login: async (username, password) => {
     try {
-      // Use axios for consistency with other calls
+      console.log('Attempting login with:', { username });
       const response = await api.post('/login', { username, password });
-      if (response.data.token) {
+      console.log('Login response:', response.data);
+      if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('currentDir', response.data.currentDir);
+        if (response.data.currentDir) {
+          localStorage.setItem('currentDir', response.data.currentDir);
+        }
       }
       return response.data;
     } catch (error) {
@@ -44,7 +68,6 @@ export const authService = {
   },
   signup: async (username, password) => {
     try {
-      // Use axios now that we have a proxy
       const response = await api.post('/signup', { username, password });
       return response.data;
     } catch (error) {

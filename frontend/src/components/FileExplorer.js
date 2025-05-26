@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fileSystemService, authService } from '../api';
-import { FaFolder, FaFile, FaArrowUp, FaTrash, FaEdit, FaPen, FaSave, FaMicrophone, FaCheck, FaSun, FaMoon } from 'react-icons/fa';
+import { FaFolder, FaFile, FaArrowUp, FaTrash, FaEdit, FaPen, FaSave, FaMicrophone, FaCheck, FaSun, FaMoon, FaTerminal } from 'react-icons/fa';
 import './FileExplorer.css';
+import Terminal from './Terminal';
 
 const FileExplorer = () => {
   const [files, setFiles] = useState([]);
@@ -24,6 +25,7 @@ const FileExplorer = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [itemToRename, setItemToRename] = useState(null);
   const [newItemName, setNewItemName] = useState('');
+  const [showTerminal, setShowTerminal] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -453,6 +455,17 @@ const FileExplorer = () => {
     });
   };
 
+  const toggleTerminal = () => {
+    setShowTerminal(!showTerminal);
+    // If terminal is being shown, ensure it's visible
+    if (!showTerminal) {
+      const terminalWrapper = document.querySelector('.terminal-wrapper');
+      if (terminalWrapper) {
+        terminalWrapper.style.display = 'block';
+      }
+    }
+  };
+
   // Enhanced function to specifically handle voice commands
   // This function is defined for future expansion of voice command features
   // and can be called from handleStartVoiceCommand as needed
@@ -588,6 +601,14 @@ const FileExplorer = () => {
               title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {darkMode ? <FaSun /> : <FaMoon />}
+            </button>
+            
+            <button 
+              className="action-btn"
+              onClick={toggleTerminal}
+              title="Open Terminal"
+            >
+              <FaTerminal /> Terminal
             </button>
             
             <button 
@@ -812,6 +833,10 @@ const FileExplorer = () => {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="terminal-wrapper">
+        <Terminal currentPath={currentDir} onCommandExecuted={fetchFiles} />
       </div>
     </>
   );
