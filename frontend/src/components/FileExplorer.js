@@ -650,193 +650,207 @@ const FileExplorer = () => {
           <div className="current-path">
             <strong>Current Path:</strong> {currentDir}
           </div>
-          <button onClick={handleNavigateUp} className="nav-btn">
-            <FaArrowUp /> Up
-          </button>
         </div>
-        
-        <div className="actions">
-          <button onClick={() => setShowCreateFolder(true)} className="action-btn">
-            <FaFolder /> New Folder
-          </button>
-          <button onClick={() => setShowCreateFile(true)} className="action-btn">
-            <FaFile /> New File
-          </button>
-        </div>
-        
-        {showCreateFolder && (
-          <div className="modal">
-            <div className="modal-content">
-              <h3>Create New Folder</h3>
-              <input
-                type="text"
-                placeholder="Folder Name"
-                value={newFolderName}
-                onChange={(e) => setNewFolderName(e.target.value)}
-              />
-              <div className="modal-actions">
-                <button onClick={handleCreateFolder}>Create</button>
-                <button onClick={() => setShowCreateFolder(false)}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {showCreateFile && (
-          <div className="modal">
-            <div className="modal-content">
-              <h3>Create New File</h3>
-              <input
-                type="text"
-                placeholder="File Name"
-                value={newFileName}
-                onChange={(e) => setNewFileName(e.target.value)}
-              />
-              <textarea
-                placeholder="File Content"
-                value={newFileContent}
-                onChange={(e) => setNewFileContent(e.target.value)}
-              />
-              <div className="modal-actions">
-                <button onClick={handleCreateFile}>Create</button>
-                <button onClick={() => setShowCreateFile(false)}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {itemToRename && (
-          <div className="modal-backdrop">
-            <div className="modal-content">
-              <h3>
-                {/* Determine if it's a file or folder based on the file list */}
-                {files.find(item => item.name === itemToRename)?.type === 'directory' 
-                  ? <><FaFolder className="modal-icon folder" /> Rename Folder</>
-                  : <><FaFile className="modal-icon file" /> Rename File</>
-                }
-              </h3>
-              <div className="modal-form">
-                <div className="form-group">
-                  <label>Current Name:</label>
-                  <div className="current-name">{itemToRename}</div>
-                </div>
-                <div className="form-group">
-                  <label>New Name:</label>
-                  <input
-                    type="text"
-                    value={newItemName}
-                    onChange={(e) => setNewItemName(e.target.value)}
-                    placeholder="Enter new name"
-                    autoFocus
-                  />
-                </div>
-              </div>
-              <div className="modal-actions">
-                <button 
-                  onClick={handleRenameItem}
-                  disabled={!newItemName.trim() || newItemName === itemToRename}
-                >
-                  Rename
-                </button>
-                <button onClick={() => {
-                  setItemToRename(null);
-                  setNewItemName('');
-                }}>Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
         
         <div className="explorer-container">
           <div className="file-list">
-            <h3>Files and Folders</h3>
+            <div className="actions">
+              <button className="action-btn" onClick={() => handleNavigateUp()}>
+                <FaArrowUp /> Up
+              </button>
+              <button className="action-btn" onClick={() => setShowCreateFolder(true)}>
+                <FaFolder /> New Folder
+              </button>
+              <button className="action-btn" onClick={() => setShowCreateFile(true)}>
+                <FaFile /> New File
+              </button>
+            </div>
+
             {loading ? (
               <div className="loading">Loading...</div>
+            ) : error ? (
+              <div className="error-message">{error}</div>
+            ) : files.length === 0 ? (
+              <div className="empty-message">
+                <div className="empty-illustration">
+                  <FaFolder />
+                </div>
+                <h3 className="empty-title">This folder is empty</h3>
+                <p className="empty-subtitle">
+                  Start by creating a new file or folder to organize your content.
+                  You can also use voice commands or the terminal for advanced operations.
+                </p>
+                <div className="empty-actions">
+                  <button className="empty-action-btn" onClick={() => setShowCreateFolder(true)}>
+                    <FaFolder /> New Folder
+                  </button>
+                  <button className="empty-action-btn" onClick={() => setShowCreateFile(true)}>
+                    <FaFile /> New File
+                  </button>
+                </div>
+              </div>
             ) : (
               <ul>
-                {files.length === 0 ? (
-                  <li className="empty-message">No files or folders found</li>
-                ) : (
-                  files.map((item) => (
-                    <li key={item.name} className={`file-item ${selectedFile === item.name ? 'selected' : ''}`}>
-                      <div 
-                        className="file-name"
-                        onClick={() => item.type === 'directory' 
-                          ? handleNavigate(item.name) 
-                          : handleFileClick(item.name)
-                        }
+                {files.map((file) => (
+                  <li
+                    key={file.name}
+                    className={`file-item ${selectedFile === file.name ? 'selected' : ''}`}
+                    onClick={() => file.type === 'directory' ? handleNavigate(file.name) : handleFileClick(file.name)}
+                  >
+                    <span className="file-name">
+                      {file.type === 'directory' ? (
+                        <FaFolder className="icon folder" />
+                      ) : (
+                        <FaFile className="icon file" />
+                      )}
+                      {file.name}
+                    </span>
+                    <div className="file-actions">
+                      <button
+                        className="file-action-btn rename"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setItemToRename(file.name);
+                        }}
                       >
-                        {item.type === 'directory' ? <FaFolder className="icon folder" /> : <FaFile className="icon file" />}
-                        {item.name}
-                      </div>
-                      <div className="file-actions">
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setItemToRename(item.name);
-                            setNewItemName(item.name);
-                          }}
-                          className="file-action-btn rename"
-                          title="Rename"
-                        >
-                          <FaPen />
-                        </button>
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteItem(item.name, item.type === 'directory');
-                          }}
-                          className="file-action-btn delete"
-                          title="Delete"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </li>
-                  ))
-                )}
+                        <FaPen />
+                      </button>
+                      <button
+                        className="file-action-btn delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteItem(file.name, file.type === 'directory');
+                        }}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </li>
+                ))}
               </ul>
             )}
           </div>
           
-          <div className="file-preview">
-            <h3>
-              {selectedFile ? (
-                <>
-                  <span>File: {selectedFile}</span>
-                  <div className="file-preview-actions">
-                    {editMode ? (
-                      <button onClick={handleSaveFile} className="edit-btn save">
-                        <FaSave /> Save
-                      </button>
-                    ) : (
-                      <button onClick={() => setEditMode(true)} className="edit-btn">
-                        <FaEdit /> Edit
-                      </button>
-                    )}
-                  </div>
-                </>
-              ) : (
-                'Select a file to preview'
-              )}
-            </h3>
-            {selectedFile && (
-              editMode ? (
+          {selectedFile && (
+            <div className="file-preview">
+              <h3>
+                {selectedFile}
+                <div className="file-preview-actions">
+                  {!editMode && (
+                    <button className="edit-btn" onClick={() => setEditMode(true)}>
+                      <FaEdit /> Edit
+                    </button>
+                  )}
+                  {editMode && (
+                    <button className="edit-btn save" onClick={handleSaveFile}>
+                      <FaSave /> Save
+                    </button>
+                  )}
+                </div>
+              </h3>
+              {editMode ? (
                 <textarea
                   className="file-content-editor"
                   value={fileContent}
                   onChange={(e) => setFileContent(e.target.value)}
                 />
               ) : (
-                <pre className="file-content">{fileContent}</pre>
-              )
-            )}
-          </div>
+                <div className="file-content">{fileContent}</div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
+      {showCreateFolder && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Create New Folder</h3>
+            <input
+              type="text"
+              placeholder="Folder Name"
+              value={newFolderName}
+              onChange={(e) => setNewFolderName(e.target.value)}
+            />
+            <div className="modal-actions">
+              <button onClick={handleCreateFolder}>Create</button>
+              <button onClick={() => setShowCreateFolder(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCreateFile && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Create New File</h3>
+            <input
+              type="text"
+              placeholder="File Name"
+              value={newFileName}
+              onChange={(e) => setNewFileName(e.target.value)}
+            />
+            <textarea
+              placeholder="File Content"
+              value={newFileContent}
+              onChange={(e) => setNewFileContent(e.target.value)}
+            />
+            <div className="modal-actions">
+              <button onClick={handleCreateFile}>Create</button>
+              <button onClick={() => setShowCreateFile(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {itemToRename && (
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <h3>
+              {files.find(item => item.name === itemToRename)?.type === 'directory' 
+                ? <><FaFolder className="modal-icon folder" /> Rename Folder</>
+                : <><FaFile className="modal-icon file" /> Rename File</>
+              }
+            </h3>
+            <div className="modal-form">
+              <div className="form-group">
+                <label>Current Name:</label>
+                <div className="current-name">{itemToRename}</div>
+              </div>
+              <div className="form-group">
+                <label>New Name:</label>
+                <input
+                  type="text"
+                  value={newItemName}
+                  onChange={(e) => setNewItemName(e.target.value)}
+                  placeholder="Enter new name"
+                  autoFocus
+                />
+              </div>
+            </div>
+            <div className="modal-actions">
+              <button 
+                onClick={handleRenameItem}
+                disabled={!newItemName.trim() || newItemName === itemToRename}
+              >
+                Rename
+              </button>
+              <button onClick={() => {
+                setItemToRename(null);
+                setNewItemName('');
+              }}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="terminal-wrapper">
         <Terminal currentPath={currentDir} onCommandExecuted={fetchFiles} />
+      </div>
+
+      <div className="watermark">
+        <div className="watermark-team">Team Eclipse</div>
+        <div className="watermark-members">Priyanshi • Aditya • Vivek</div>
       </div>
     </>
   );

@@ -81,14 +81,7 @@
 }
 
 .path-navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  background-color: white;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
 }
 
 .current-path {
@@ -363,7 +356,97 @@
 .empty-message {
   text-align: center;
   color: #7f8c8d;
-  padding: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+}
+
+.empty-illustration {
+  margin-bottom: 1.5rem;
+  font-size: 5rem;
+  color: #3498db;
+  opacity: 0.7;
+  animation: float 3s ease-in-out infinite;
+}
+
+.empty-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.empty-subtitle {
+  font-size: 1rem;
+  color: #7f8c8d;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.empty-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.empty-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #3498db;
+  color: white;
+}
+
+.empty-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Dark mode styles */
+.dark-mode .empty-message {
+  color: #a0aec0;
+}
+
+.dark-mode .empty-illustration {
+  color: #4299e1;
+}
+
+.dark-mode .empty-title {
+  color: #f7fafc;
+}
+
+.dark-mode .empty-subtitle {
+  color: #a0aec0;
+}
+
+.dark-mode .empty-action-btn {
+  background-color: #4299e1;
+}
+
+.dark-mode .empty-action-btn:hover {
+  background-color: #3182ce;
 }
 
 .modal {
@@ -614,7 +697,7 @@
 }
 
 .dark-mode .empty-message {
-  color: #cbd5e0;
+  color: #a0aec0;
 }
 
 .dark-mode .error-message {
@@ -817,4 +900,41 @@
   background: transparent;
   z-index: 1000;
   display: none;
+}
+
+.watermark {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+  text-align: right;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.watermark:hover {
+  opacity: 0.8;
+}
+
+.watermark-team {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 4px;
+  font-family: 'Arial', sans-serif;
+}
+
+.watermark-members {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.dark-mode .watermark-team {
+  color: #e2e8f0;
+}
+
+.dark-mode .watermark-members {
+  color: #a0aec0;
 } 
